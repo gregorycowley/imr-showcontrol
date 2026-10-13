@@ -21,7 +21,7 @@ The shell looks for the server, shows a waiting screen until it answers, then lo
 The address is chosen in this order:
 
 1. `--url=http://host:port/` on the command line
-2. the `SHOWCONTROL_URL` environment variable
+2. the `SHOWCONTROL_URL` environment variable, or `SHOWCONTROL_URL` in the project's `.env` file (when running from the repo)
 3. the address saved from **Server > Change Server Address…** (⌘L)
 4. `config.json` in this folder (default `http://127.0.0.1:5173/`)
 

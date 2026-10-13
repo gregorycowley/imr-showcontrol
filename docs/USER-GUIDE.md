@@ -9,8 +9,9 @@ This guide covers Phase 1. Later phases add timeline editing, sound lanes, playb
 ## Starting the app
 
 1. Install dependencies once: `npm install`
-2. Start the app: `npm run dev`
-3. Open `http://127.0.0.1:5173/` in a browser.
+2. Copy `.env.example` to `.env`. The defaults work for one machine; edit it to change the address, port, or where the show file is kept. `.env` is private to your machine and is never committed.
+3. Start the app: `npm run dev`
+4. Open `http://127.0.0.1:5173/` in a browser.
 
 The app saves your work automatically to `show.json` in the project folder. There is no Save button. If a save fails, a message appears at the bottom of the Actions panel.
 

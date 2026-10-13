@@ -34,12 +34,30 @@ function writeJson(file, data) {
   fs.writeFileSync(file, `${JSON.stringify(data, null, 2)}\n`)
 }
 
-// Address priority: --url flag, SHOWCONTROL_URL, saved settings, bundled config.
+// Reads KEY=value lines from the project .env when the shell runs from the
+// repo (shell/ sits next to .env). A packaged app has no .env and skips this.
+function readDotEnv() {
+  const file = path.join(__dirname, '..', '.env')
+  if (app.isPackaged || !fs.existsSync(file)) return {}
+  const values = {}
+  for (const line of fs.readFileSync(file, 'utf8').split('\n')) {
+    const match = /^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*?)\s*$/.exec(line)
+    if (!match || line.trim().startsWith('#')) continue
+    values[match[1]] = match[2].replace(/^(['"])(.*)\1$/, '$2')
+  }
+  return values
+}
+
+// Address priority: --url flag, SHOWCONTROL_URL (environment, then .env),
+// saved settings, bundled config.
 function loadSettings() {
   const saved = readJson(settingsPath) ?? {}
+  const dotEnv = readDotEnv()
   const flag = process.argv.find((arg) => arg.startsWith('--url='))?.slice(6)
   return {
-    url: normalizeUrl(flag || process.env.SHOWCONTROL_URL || saved.url || bundledConfig.url),
+    url: normalizeUrl(
+      flag || process.env.SHOWCONTROL_URL || dotEnv.SHOWCONTROL_URL || saved.url || bundledConfig.url,
+    ),
     pollMs: Number(saved.pollMs ?? bundledConfig.pollMs) || 2000,
   }
 }
