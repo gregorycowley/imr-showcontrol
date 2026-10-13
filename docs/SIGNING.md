@@ -46,7 +46,7 @@ At [App Store Connect → Integrations → API](https://appstoreconnect.apple.co
 base64 -i AuthKey_XXXXXXXX.p8 | pbcopy
 ```
 
-That text is the `APPLE_API_KEY` secret.
+That text is the `APPLE_API_KEY` secret. `notarytool` does not accept the base64 text itself. It wants a path to the `.p8`. The release workflow decodes the secret into a file and passes that path. A trailing newline from `pbcopy` is stripped there. If notarization says `The value '***' is invalid for '--key'`, the secret was passed as a path instead of being decoded.
 
 ## GitHub secrets
 

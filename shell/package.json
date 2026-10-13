@@ -1,7 +1,7 @@
 {
   "name": "showcontrol-shell",
   "productName": "Show Control",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Thin window that loads the Show Control interface from a server.",
   "author": "Gregory Cowley",
   "private": true,

@@ -34,13 +34,35 @@ jobs:
       - name: Build the interface into the shell
         run: npm run build -- --outDir shell/ui --emptyOutDir
 
+      # notarytool --key needs a file path. The secret is the base64 of the .p8,
+      # often with a trailing newline from pbcopy, which is not a path.
+      - name: Prepare the notarization key
+        if: runner.os == 'macOS'
+        env:
+          APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/notary"
+          keyfile="$RUNNER_TEMP/notary/AuthKey.p8"
+          raw=$(printf '%s' "$APPLE_API_KEY" | tr -d '\r')
+          if printf '%s' "$raw" | grep -q "BEGIN PRIVATE KEY"; then
+            printf '%s\n' "$raw" > "$keyfile"
+          else
+            printf '%s' "$raw" | tr -d '[:space:]' | base64 -D > "$keyfile"
+          fi
+          grep -q "BEGIN PRIVATE KEY" "$keyfile"
+          echo "NOTARY_KEY_PATH=$keyfile" >> "$GITHUB_ENV"
+          echo "NOTARY_KEY_ID=$(printf '%s' "$APPLE_API_KEY_ID" | tr -d '[:space:]')" >> "$GITHUB_ENV"
+          echo "NOTARY_ISSUER=$(printf '%s' "$APPLE_API_ISSUER" | tr -d '[:space:]')" >> "$GITHUB_ENV"
+
       - name: Package and publish
         working-directory: shell
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CSC_LINK: ${{ secrets.CSC_LINK }}
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
-          APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
-          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
-          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+          APPLE_API_KEY: ${{ env.NOTARY_KEY_PATH }}
+          APPLE_API_KEY_ID: ${{ env.NOTARY_KEY_ID }}
+          APPLE_API_ISSUER: ${{ env.NOTARY_ISSUER }}
         run: npx electron-builder --publish always
