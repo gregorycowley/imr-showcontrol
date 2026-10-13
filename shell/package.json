@@ -1,7 +1,7 @@
 {
   "name": "showcontrol-shell",
   "productName": "Show Control",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Thin window that loads the Show Control interface from a server.",
   "author": "Gregory Cowley",
   "private": true,
@@ -32,7 +32,9 @@
     "mac": {
       "category": "public.app-category.education",
       "target": ["dmg", "zip"],
-      "identity": null
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "notarize": true
     },
     "win": {
       "target": ["nsis"]
