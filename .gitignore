@@ -1,5 +1,6 @@
 # Show Control
 show.json.tmp
+.DS_Store
 
 # Local-only assets (room scans, sketches, reference PDFs)
 rm140-models/
