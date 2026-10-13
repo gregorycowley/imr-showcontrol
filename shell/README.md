@@ -58,6 +58,19 @@ npm run start:kiosk -- --url=http://192.168.1.20:5173/
 
 Kiosk mode fills the screen with no window chrome. Quit with ⌘Q.
 
+## Download for students
+
+Push a version tag and GitHub Actions builds a Mac zip and a Windows installer, then attaches them to a release:
+
+```sh
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+The release page is `https://github.com/gregorycowley/imr-showcontrol/releases`. The packaged app includes the interface and saves `show.json` in the app's user data folder. It does not need Node or a running server. Server > Change Server Address… still points a copy at a classroom server. Server > Use Built-in Interface switches back.
+
+The app is unsigned. Mac students right-click and choose Open the first time. Windows students choose More info, then Run anyway.
+
 ## Package a Mac app
 
 ```sh

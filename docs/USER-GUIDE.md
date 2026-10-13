@@ -15,6 +15,10 @@ This guide covers Phase 1. Later phases add timeline editing, sound lanes, playb
 
 The app saves your work automatically to `show.json` in the project folder. There is no Save button. If a save fails, a message appears at the bottom of the Actions panel.
 
+### Download the app
+
+Releases are built on GitHub. Open the latest release at `https://github.com/gregorycowley/imr-showcontrol/releases`, download the Mac zip or the Windows installer, and follow the notes on that page. The downloaded app includes the interface. Your show is saved on your computer. The first open on a Mac needs a right-click, then Open, because the app is not notarized.
+
 ### Using the Show Control app instead of a browser
 
 There is also a small desktop app, the **shell**, that opens the interface in its own window with no browser tabs or address bar. It downloads the interface from the server each time it loads, so when the interface is updated on the server, the app shows the new version after a reload (⌘R). Nothing has to be reinstalled.

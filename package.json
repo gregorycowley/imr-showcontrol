@@ -11,7 +11,7 @@
     "preview:lan": "vite preview --host 0.0.0.0",
     "shell": "npm --prefix shell start",
     "shell:install": "npm --prefix shell install",
-    "shell:dist": "npm --prefix shell run dist"
+    "shell:dist": "npm run build -- --outDir shell/ui --emptyOutDir && npm --prefix shell run dist"
   },
   "dependencies": {
     "react": "^19.2.0",

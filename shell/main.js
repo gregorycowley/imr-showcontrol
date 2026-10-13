@@ -8,6 +8,7 @@
 const { app, BrowserWindow, Menu, dialog, ipcMain, net, shell } = require('electron')
 const fs = require('node:fs')
 const path = require('node:path')
+const { startLocalServer } = require('./local.js')
 
 const bundledConfig = readJson(path.join(__dirname, 'config.json')) ?? {}
 const userDir = app.getPath('userData')
@@ -17,7 +18,8 @@ const windowStatePath = path.join(userDir, 'window.json')
 let win = null
 let addressWin = null
 let pollTimer = null
-let settings = loadSettings()
+let localServer = null
+let settings = null
 
 const kiosk = process.argv.includes('--kiosk')
 
@@ -48,18 +50,34 @@ function readDotEnv() {
   return values
 }
 
-// Address priority: --url flag, SHOWCONTROL_URL (environment, then .env),
-// saved settings, bundled config.
+function uiDir() {
+  return path.join(__dirname, 'ui')
+}
+
+function hasBundledUi() {
+  return fs.existsSync(path.join(uiDir(), 'index.html'))
+}
+
+// A packaged app opens the interface that was built into it. A server address
+// is used only when one is given (--url, SHOWCONTROL_URL, .env, or the menu).
+// Running from the repo keeps the old default: the dev server in config.json.
 function loadSettings() {
   const saved = readJson(settingsPath) ?? {}
   const dotEnv = readDotEnv()
   const flag = process.argv.find((arg) => arg.startsWith('--url='))?.slice(6)
-  return {
-    url: normalizeUrl(
-      flag || process.env.SHOWCONTROL_URL || dotEnv.SHOWCONTROL_URL || saved.url || bundledConfig.url,
-    ),
-    pollMs: Number(saved.pollMs ?? bundledConfig.pollMs) || 2000,
-  }
+  const envUrl = process.env.SHOWCONTROL_URL || dotEnv.SHOWCONTROL_URL
+  const pollMs = Number(saved.pollMs ?? bundledConfig.pollMs) || 2000
+
+  if (flag) return { mode: 'server', url: normalizeUrl(flag), pollMs }
+  if (process.argv.includes('--bundled') && hasBundledUi()) return { mode: 'bundled', url: '', pollMs }
+  if (envUrl) return { mode: 'server', url: normalizeUrl(envUrl), pollMs }
+  if (saved.mode === 'server' && saved.url) return { mode: 'server', url: normalizeUrl(saved.url), pollMs }
+  if (app.isPackaged && hasBundledUi()) return { mode: 'bundled', url: '', pollMs }
+  return { mode: 'server', url: normalizeUrl(saved.url || bundledConfig.url), pollMs }
+}
+
+function sourceLabel() {
+  return settings.mode === 'bundled' ? 'the built-in interface' : settings.url
 }
 
 function normalizeUrl(value) {
@@ -95,10 +113,26 @@ function stopPolling() {
   pollTimer = null
 }
 
-// Show the waiting page, then poll until the server answers and load it.
+async function bundledUrl() {
+  if (!localServer) {
+    localServer = await startLocalServer({
+      uiDir: uiDir(),
+      showFile: path.join(app.getPath('userData'), 'show.json'),
+    })
+  }
+  return localServer.url
+}
+
+// Built-in interface loads immediately. A server address waits until it answers.
 async function connect() {
   stopPolling()
+  buildMenu()
   if (!win) return
+  if (settings.mode === 'bundled') {
+    win.setTitle('Show Control')
+    win.loadURL(await bundledUrl())
+    return
+  }
   win.setTitle(`Show Control — ${settings.url}`)
   if (await serverReachable(settings.url)) {
     win.loadURL(settings.url)
@@ -151,9 +185,10 @@ function createWindow() {
     })
   }
 
-  // If the server drops while the page is open, fall back to the waiting page.
+  // If a remote server drops while the page is open, fall back to the waiting page.
   win.webContents.on('did-fail-load', (_event, code, _description, url, isMainFrame) => {
     if (!isMainFrame || code === -3 /* aborted */) return
+    if (settings.mode === 'bundled') return
     if (url.startsWith('file://')) return
     connect()
   })
@@ -211,11 +246,17 @@ function openAddressWindow() {
 }
 
 ipcMain.on('address:save', (_event, url) => {
-  settings = { ...settings, url: normalizeUrl(url) }
+  settings = { ...settings, mode: 'server', url: normalizeUrl(url) }
   saveSettings()
   if (addressWin) addressWin.close()
   connect()
 })
+
+function useBundled() {
+  settings = { ...settings, mode: 'bundled', url: '' }
+  saveSettings()
+  connect()
+}
 
 ipcMain.on('address:cancel', () => {
   if (addressWin) addressWin.close()
@@ -264,7 +305,13 @@ function buildMenu() {
           click: () => openAddressWindow(),
         },
         {
+          label: 'Use Built-in Interface',
+          enabled: hasBundledUi(),
+          click: () => useBundled(),
+        },
+        {
           label: 'Open Server in Browser',
+          enabled: settings.mode === 'server',
           click: () => shell.openExternal(settings.url),
         },
         { type: 'separator' },
@@ -316,7 +363,7 @@ function buildMenu() {
               type: 'info',
               title: 'Show Control shell',
               message: 'Show Control shell',
-              detail: `Loads the interface from:\n${settings.url}\n\nChange the address under Server > Change Server Address…\nStart with --url=http://host:port/ or --kiosk for the room machine.`,
+              detail: `This copy shows ${sourceLabel()}.\n\nThe downloaded app includes the interface. Server > Change Server Address… points it at a classroom server instead, and the show is saved on this computer.`,
             }),
         },
       ],
@@ -326,6 +373,7 @@ function buildMenu() {
 }
 
 app.whenReady().then(() => {
+  settings = loadSettings()
   buildMenu()
   createWindow()
   app.on('activate', () => {

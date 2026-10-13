@@ -9,7 +9,7 @@
   "scripts": {
     "start": "electron .",
     "start:kiosk": "electron . --kiosk",
-    "dist": "electron-builder --mac"
+    "dist": "electron-builder --mac --publish never"
   },
   "devDependencies": {
     "electron": "^33.2.0",
@@ -23,16 +23,31 @@
     },
     "files": [
       "main.js",
+      "local.js",
       "preload.js",
       "config.json",
-      "pages/**"
+      "pages/**",
+      "ui/**"
     ],
     "mac": {
       "category": "public.app-category.education",
-      "target": [
-        "dir",
-        "zip"
-      ]
+      "target": ["dmg", "zip"],
+      "identity": null
+    },
+    "win": {
+      "target": ["nsis"]
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "gregorycowley",
+      "repo": "imr-showcontrol"
+    },
+    "releaseInfo": {
+      "releaseNotesFile": "student-release.md"
     }
   }
 }
