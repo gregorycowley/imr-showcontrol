@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 792" width="1200" height="792">
+  <g font-family="Helvetica, Arial, sans-serif" fill="#000">
+    <text x="48" y="40" font-size="20">WEB INTERFACE.</text>
+    <text x="48" y="64" font-size="16">preview</text>
+  </g>
+
+  <g fill="none" stroke="#000" stroke-width="2" stroke-dasharray="7 6" stroke-linecap="butt">
+    <path d="M58 108 V378 L248 328 V158 L58 108" />
+    <path d="M248 158 L1120 196" />
+    <path d="M248 328 L1120 372" />
+  </g>
+
+  <g fill="#fff" stroke="#000" stroke-width="2" stroke-linejoin="miter">
+    <polygon fill="#fff" points="99.8,143.8 206.2,166.2 206.2,235.3 99.8,233.1" />
+    <polygon fill="#fff" points="67.5,264.2 111.2,262.4 111.2,301.1 67.5,306.6" />
+    <polygon fill="#fff" points="67.5,311.9 111.2,305.9 111.2,347.1 67.5,357" />
+
+    <polygon fill="#fff" points="318,228 392,162 478,154 452,224" />
+    <polygon fill="#fff" points="318,228 452,224 548,258 372,272" />
+    <polygon fill="#fff" points="372,272 548,258 548,312 372,328" />
+    <polygon fill="#fff" points="318,228 372,272 372,328 318,286" />
+
+    <rect fill="#fff" x="590" y="112" width="108" height="118" />
+    <rect fill="#fff" x="748" y="96" width="96" height="320" />
+    <rect fill="#fff" x="890" y="168" width="168" height="112" />
+    <polygon fill="#fff" points="1092,124 1200,108 1200,292 1072,314" />
+  </g>
+
+  <g font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#000" text-anchor="middle">
+    <text x="153" y="200">2</text>
+    <text x="89" y="290">0</text>
+    <text x="89" y="338">1</text>
+    <text x="278" y="196">3</text>
+    <text x="430" y="142">4</text>
+    <text x="410" y="204">5</text>
+    <text x="644" y="178">6</text>
+    <text x="796" y="266">7</text>
+    <text x="974" y="232">8</text>
+    <text x="974" y="312">9</text>
+    <text x="1140" y="210">10</text>
+  </g>
+
+  <g fill="none" stroke="#000" stroke-width="2">
+    <path d="M40 448 H1160" />
+    <path d="M700 448 V748" />
+    <path d="M1120 448 V748" />
+    <path d="M96 528 V710" />
+    <path d="M168 528 V690" />
+    <path d="M246 528 V700" />
+    <path d="M328 528 V680" />
+    <path d="M410 528 V668" />
+  </g>
+
+  <g fill="#fff" stroke="#000" stroke-width="2">
+    <rect fill="#fff" x="78" y="468" width="28" height="40" />
+    <rect fill="#fff" x="78" y="548" width="108" height="18" />
+    <rect fill="#fff" x="142" y="590" width="140" height="18" />
+    <rect fill="#fff" x="150" y="632" width="58" height="18" />
+  </g>
+
+  <g fill="#000" stroke="#000" stroke-width="2" stroke-linejoin="miter">
+    <path d="M92 478 V498 M84 490 L92 498 L100 490" />
+    <path d="M118 488 H150 M142 480 L150 488 L142 496" />
+    <circle cx="92" cy="557" r="4" />
+    <circle cx="156" cy="599" r="4" />
+    <circle cx="164" cy="641" r="4" />
+  </g>
+
+  <g font-family="Helvetica, Arial, sans-serif" font-size="18" fill="#000" text-anchor="middle">
+    <text x="58" y="494">1</text>
+    <text x="168" y="508">2</text>
+    <text x="246" y="508">3</text>
+    <text x="328" y="508">4</text>
+    <text x="410" y="508">5</text>
+  </g>
+
+  <g font-family="Helvetica, Arial, sans-serif" font-size="20" fill="#000">
+    <text x="740" y="510">if then trigger cards.</text>
+    <text x="740" y="542">(like prot&#233;g&#233;).</text>
+  </g>
+</svg>

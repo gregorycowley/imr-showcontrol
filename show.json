@@ -1,0 +1,18 @@
+{
+  "cast": [],
+  "score": {
+    "regions": [
+      { "region": 1, "spans": [] },
+      { "region": 2, "spans": [] },
+      { "region": 3, "spans": [] },
+      { "region": 4, "spans": [] },
+      { "region": 5, "spans": [] },
+      { "region": 6, "spans": [] },
+      { "region": 7, "spans": [] },
+      { "region": 8, "spans": [] },
+      { "region": 9, "spans": [] },
+      { "region": 10, "spans": [] }
+    ]
+  },
+  "playhead": 1
+}

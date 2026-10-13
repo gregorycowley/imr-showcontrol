@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <g fill="none" stroke="#000" stroke-width="2" stroke-linejoin="miter">
+    <path d="M70 60 H730 V540 H70 Z" />
+    <path d="M250 150 H550 V450 H250 Z" />
+    <path d="M70 60 L250 150 M730 60 L550 150 M70 540 L250 450 M730 540 L550 450" />
+  </g>
+  <g stroke="#000" stroke-width="2" stroke-linejoin="miter">
+    <polygon fill="#e53935" points="91.6,135 145.6,154.4 145.6,283.8 91.6,281.7" />
+    <polygon fill="#fb8c00" points="163.6,307.7 221.2,306.6 221.2,418.4 163.6,439.1" />
+    <polygon fill="#fdd835" points="274,174 391,174 391,291 274,291" />
+    <polygon fill="#43a047" points="409,174 526,174 526,291 409,291" />
+    <polygon fill="#1e88e5" points="274,309 391,309 391,426 274,426" />
+    <polygon fill="#8e24aa" points="409,309 526,309 526,426 409,426" />
+    <polygon fill="#00acc1" points="708.4,300 654.4,300 654.4,437.5 708.4,455.9" />
+    <polygon fill="#d81b60" points="632.8,169.8 575.2,189.4 575.2,293.5 632.8,292.3" />
+  </g>
+</svg>

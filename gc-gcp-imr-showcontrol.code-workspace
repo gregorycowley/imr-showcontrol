@@ -1,0 +1,12 @@
+{
+    "folders": [
+        {
+            "name": "gc-gcp-imr-showcontrol",
+            "path": "."
+        },
+        {
+            "name": "Headway",
+            "path": "../../../../../HeadwayProjects/gc-gcp-imr-showcontrol"
+        }
+    ]
+}

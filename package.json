@@ -1,0 +1,24 @@
+{
+  "name": "gc-gcp-imr-showcontrol",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:lan": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview",
+    "preview:lan": "vite preview --host 0.0.0.0",
+    "shell": "npm --prefix shell start",
+    "shell:install": "npm --prefix shell install",
+    "shell:dist": "npm --prefix shell run dist"
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.0.4",
+    "vite": "^7.1.7"
+  }
+}

@@ -1,3 +1,11 @@
+# Show Control
+show.json.tmp
+
+# Local-only assets (room scans, sketches, reference PDFs)
+rm140-models/
+sketches/
+reference/
+
 # Logs
 logs
 *.log

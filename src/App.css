@@ -1,0 +1,420 @@
+.layout {
+  width: min(100vw, calc(100vh * 1920 / 1080));
+  height: min(100vh, calc(100vw * 1080 / 1920));
+  display: grid;
+  grid-template-columns: 90fr 5fr 1145.9fr 19.3fr 557.8fr 102fr;
+  grid-template-rows: 93.5fr 435fr 18fr 440fr 93.5fr;
+}
+
+.stage {
+  grid-column: 2 / 6;
+  grid-row: 2;
+}
+
+.timeline {
+  grid-column: 3 / 4;
+  grid-row: 4;
+}
+
+.actions {
+  grid-column: 5 / 6;
+  grid-row: 4;
+}
+
+.panel {
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #000;
+  background: #fff;
+}
+
+.panel h2 {
+  margin: 0;
+  padding: 12px 18px 0;
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.panel button {
+  box-sizing: border-box;
+  border: 1px solid #000;
+  background: #fff;
+  color: #000;
+  font: inherit;
+  font-size: 14px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: background-color 150ms;
+}
+
+.panel button:hover:not(:disabled) {
+  background: #eee;
+}
+
+.panel button:disabled {
+  cursor: default;
+  color: #888;
+  border-color: #888;
+}
+
+.panel input,
+.panel select {
+  box-sizing: border-box;
+  border: 1px solid #000;
+  background: #fff;
+  color: #000;
+  font: inherit;
+  font-size: 14px;
+  padding: 4px 8px;
+}
+
+/* Stage */
+
+.stage-preview {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  justify-content: center;
+  padding: 4px 24px 6px;
+}
+
+.room {
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+}
+
+.room-lines path {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2;
+  stroke-linejoin: miter;
+}
+
+.face polygon {
+  fill: #fff;
+  stroke: #000;
+  stroke-width: 2;
+  stroke-linejoin: miter;
+  transition: fill 150ms;
+}
+
+.face-off polygon {
+  fill: #e6e6e6;
+}
+
+.face-off text {
+  fill: #777;
+}
+
+.face-droppable polygon {
+  stroke-dasharray: 6 4;
+}
+
+.face-over polygon {
+  stroke-width: 4;
+  stroke-dasharray: none;
+}
+
+.face text {
+  fill: #000;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+  user-select: none;
+}
+
+.face-number {
+  font-size: 20px;
+}
+
+.face-label {
+  font-size: 16px;
+}
+
+/* Cast strip */
+
+.cast-strip {
+  flex: none;
+  border-top: 1px solid #000;
+  padding: 6px 18px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 72px;
+}
+
+.cast-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cast-title {
+  font-size: 16px;
+}
+
+.cast-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 4px;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.cast-empty {
+  font-size: 14px;
+  color: #666;
+}
+
+.chip {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 4px 0 6px;
+  border: 1px solid #000;
+  background: #fff;
+  font-size: 14px;
+  cursor: grab;
+  user-select: none;
+}
+
+.chip:active {
+  cursor: grabbing;
+}
+
+.chip[draggable='false'] {
+  cursor: default;
+  color: #666;
+  border-style: dashed;
+}
+
+.chip-number {
+  min-width: 18px;
+  font-size: 12px;
+  text-align: center;
+}
+
+.chip-kind {
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  border: 1px solid currentColor;
+  padding: 1px 3px;
+}
+
+.chip-swatch {
+  width: 14px;
+  height: 14px;
+  border: 1px solid #000;
+}
+
+.chip-name {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.panel .chip-remove {
+  border: none;
+  padding: 0 4px;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.cast-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 8px 12px;
+}
+
+.cast-form label {
+  display: grid;
+  gap: 2px;
+  font-size: 12px;
+}
+
+.cast-form-wide input {
+  width: 320px;
+}
+
+.cast-form input[type='color'] {
+  padding: 0;
+  width: 44px;
+  height: 28px;
+}
+
+/* Timeline */
+
+.timeline-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 18px;
+}
+
+.transport {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 12px;
+}
+
+.frame-readout {
+  min-width: 80px;
+  text-align: center;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+}
+
+.score {
+  --label: 28px;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 18px 14px;
+}
+
+.score-ruler,
+.score-row {
+  display: grid;
+  grid-template-columns: var(--label) 1fr;
+}
+
+.score-ruler {
+  flex: none;
+  height: 22px;
+  grid-template-columns: var(--label) repeat(var(--frames), minmax(0, 1fr));
+}
+
+.panel .ruler-frame {
+  border: none;
+  border-bottom: 1px solid #000;
+  padding: 0;
+  font-size: 12px;
+  line-height: 1;
+  text-align: left;
+  overflow: visible;
+}
+
+.panel .ruler-frame.current {
+  background: #000;
+  color: #fff;
+}
+
+.score-rows {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-auto-rows: minmax(0, 1fr);
+}
+
+.row-label {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.row-cells {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--frames), minmax(0, 1fr));
+  border-bottom: 1px solid #ccc;
+}
+
+.cell {
+  border-left: 1px solid #ddd;
+}
+
+.cell:nth-child(5n + 1) {
+  border-left-color: #999;
+}
+
+/* A span is the bar (the frames it owns) plus a lighter hold tail that runs
+   until the next span on the row. */
+.span {
+  position: relative;
+  z-index: 1;
+  align-self: center;
+  height: 70%;
+  box-sizing: border-box;
+  margin: 0 1px;
+  border: 1px dashed #999;
+  border-left: none;
+  background: #fff;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.span-bar {
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  left: 0;
+  box-sizing: border-box;
+  border: 1px solid #000;
+  background: #fff;
+}
+
+.span-name {
+  position: relative;
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 3px;
+  padding: 0 3px;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.span-text .span-name {
+  font-style: italic;
+}
+
+.playhead {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--label) + (var(--frame) - 1) * ((100% - var(--label)) / var(--frames)));
+  width: calc((100% - var(--label)) / var(--frames));
+  background: rgba(0, 0, 0, 0.12);
+  border-left: 2px solid #000;
+  box-sizing: border-box;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Actions */
+
+.actions-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 18px 18px;
+  overflow: auto;
+}
+
+.placeholder {
+  margin: 0;
+  font-size: 15px;
+  color: #666;
+}
+
+.save-error {
+  margin: 0;
+  font-size: 14px;
+}
