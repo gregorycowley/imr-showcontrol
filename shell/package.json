@@ -1,7 +1,7 @@
 {
   "name": "showcontrol-shell",
   "productName": "Show Control",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Thin window that loads the Show Control interface from a server.",
   "author": "Gregory Cowley",
   "private": true,
@@ -9,11 +9,13 @@
   "scripts": {
     "start": "electron .",
     "start:kiosk": "electron . --kiosk",
+    "postinstall": "patch-package",
     "dist": "electron-builder --mac --publish never"
   },
   "devDependencies": {
     "electron": "^33.2.0",
-    "electron-builder": "^25.1.8"
+    "electron-builder": "^25.1.8",
+    "patch-package": "^8.0.1"
   },
   "build": {
     "appId": "com.gcp.imr.showcontrol",
@@ -31,13 +33,18 @@
     ],
     "mac": {
       "category": "public.app-category.education",
-      "target": ["dmg", "zip"],
+      "target": [
+        "dmg",
+        "zip"
+      ],
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
       "notarize": true
     },
     "win": {
-      "target": ["nsis"]
+      "target": [
+        "nsis"
+      ]
     },
     "nsis": {
       "oneClick": true,
