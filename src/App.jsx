@@ -1,14 +1,24 @@
 import { useEffect, useRef, useState } from 'react'
-import { loadShow, saveShow } from './api.js'
+import { downloadShow, loadShow, saveShow } from './api.js'
 import { Actions } from './Actions.jsx'
 import { Stage } from './Stage.jsx'
 import { Timeline } from './Timeline.jsx'
-import { addMember, normalizeShow, placeMember, removeMember, setPlayhead } from './show.js'
+import {
+  addMember,
+  normalizeShow,
+  parseShowText,
+  applyStageDrop,
+  applyTimelineDrop,
+  removeMember,
+  setPlayhead,
+  showIsBlank,
+} from './show.js'
 import './App.css'
 
 export default function App() {
   const [show, setShow] = useState(null)
   const [error, setError] = useState('')
+  const [dragKind, setDragKind] = useState(null)
   const saved = useRef('')
 
   useEffect(() => {
@@ -47,18 +57,48 @@ export default function App() {
 
   const update = (fn) => setShow((current) => (current ? fn(current) : current))
 
+  async function loadFile(file) {
+    try {
+      const next = parseShowText(await file.text())
+      if (
+        show &&
+        !showIsBlank(show) &&
+        !window.confirm('Replace the current show with this file?')
+      ) {
+        return
+      }
+      setError('')
+      setShow(next)
+    } catch (loadError) {
+      setError(loadError.message)
+    }
+  }
+
   return (
     <main className="layout">
       <Stage
         show={show}
+        dragKind={dragKind}
+        onDragKind={setDragKind}
         onAddMember={(member) => update((current) => addMember(current, member))}
         onRemoveMember={(id) => update((current) => removeMember(current, id))}
-        onPlace={(region, memberId) =>
-          update((current) => placeMember(current, region, current.playhead, memberId))
+        onDrop={(region, drag) => update((current) => applyStageDrop(current, region, drag))}
+      />
+      <Timeline
+        show={show}
+        dragKind={dragKind}
+        onDragKind={setDragKind}
+        onPlayhead={(frame) => update((current) => setPlayhead(current, frame))}
+        onDrop={(region, frame, drag) =>
+          update((current) => applyTimelineDrop(current, region, frame, drag))
         }
       />
-      <Timeline show={show} onPlayhead={(frame) => update((current) => setPlayhead(current, frame))} />
-      <Actions error={error} />
+      <Actions
+        error={error}
+        canSave={Boolean(show)}
+        onLoad={loadFile}
+        onSave={() => show && downloadShow(show)}
+      />
     </main>
   )
 }

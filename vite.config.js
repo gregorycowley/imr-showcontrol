@@ -101,6 +101,15 @@ function showFileApi() {
     configurePreviewServer(server) {
       server.middlewares.use('/api/show', showMiddleware)
     },
+    // The shared site has no writable show file. Ship the current show.json
+    // with the build so the first visit opens this data.
+    generateBundle() {
+      this.emitFile({
+        type: 'asset',
+        fileName: 'show.json',
+        source: fs.readFileSync(showFile, 'utf8'),
+      })
+    },
   }
 }
 

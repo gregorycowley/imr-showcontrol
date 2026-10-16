@@ -69,7 +69,7 @@ git push origin v1.0.0
 
 The release page is `https://github.com/gregorycowley/imr-showcontrol/releases`. The packaged app includes the interface and saves `show.json` in the app's user data folder. It does not need Node or a running server. Server > Change Server Address… still points a copy at a classroom server. Server > Use Built-in Interface switches back.
 
-The app is unsigned. Mac students right-click and choose Open the first time. Windows students choose More info, then Run anyway.
+The app is unsigned. On a Mac, the first open says the app is damaged. After it is in Applications, run `xattr -cr "/Applications/Show Control.app"`, then open it. Windows students choose More info, then Run anyway. A normal double-click on Mac needs the app signed and notarized with an Apple Developer ID.
 
 ## Package a Mac app
 

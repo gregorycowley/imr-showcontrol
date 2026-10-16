@@ -1,0 +1,243 @@
+{
+  "cast": [
+    {
+      "id": "m-ocean",
+      "number": 1,
+      "name": "Ocean",
+      "kind": "video",
+      "path": "media/ocean.mp4"
+    },
+    {
+      "id": "m-night",
+      "number": 2,
+      "name": "Night",
+      "kind": "color",
+      "value": "#0b1d36"
+    },
+    {
+      "id": "m-title",
+      "number": 3,
+      "name": "Title",
+      "kind": "text",
+      "value": "Welcome to the room"
+    },
+    {
+      "id": "m-door",
+      "number": 4,
+      "name": "Door",
+      "kind": "video",
+      "path": "media/door.mp4"
+    },
+    {
+      "id": "m-wash",
+      "number": 5,
+      "name": "Wash",
+      "kind": "video",
+      "path": "media/wash.mp4"
+    },
+    {
+      "id": "m-caption",
+      "number": 6,
+      "name": "Caption",
+      "kind": "text",
+      "value": "Step inside"
+    },
+    {
+      "id": "m-amber",
+      "number": 7,
+      "name": "Amber",
+      "kind": "color",
+      "value": "#e6a23c"
+    },
+    {
+      "id": "m-tone",
+      "number": 8,
+      "name": "Room tone",
+      "kind": "sound",
+      "path": "media/room-tone.wav"
+    },
+    {
+      "id": "m-forest",
+      "number": 9,
+      "name": "Forest",
+      "kind": "video",
+      "path": "media/forest.mp4"
+    },
+    {
+      "id": "m-hall",
+      "number": 10,
+      "name": "Hall",
+      "kind": "video",
+      "path": "media/hall.mp4"
+    },
+    {
+      "id": "m-window",
+      "number": 11,
+      "name": "Window",
+      "kind": "video",
+      "path": "media/window.mp4"
+    },
+    {
+      "id": "m-crowd",
+      "number": 12,
+      "name": "Crowd",
+      "kind": "video",
+      "path": "media/crowd.mp4"
+    },
+    {
+      "id": "m-sky",
+      "number": 13,
+      "name": "Sky",
+      "kind": "video",
+      "path": "media/sky.mp4"
+    },
+    {
+      "id": "m-arrival",
+      "number": 14,
+      "name": "Arrival",
+      "kind": "text",
+      "value": "You have arrived"
+    },
+    {
+      "id": "m-quiet",
+      "number": 15,
+      "name": "Quiet",
+      "kind": "text",
+      "value": "Listen"
+    },
+    {
+      "id": "m-dawn",
+      "number": 16,
+      "name": "Dawn",
+      "kind": "color",
+      "value": "#f4c7a1"
+    },
+    {
+      "id": "m-fog",
+      "number": 17,
+      "name": "Fog",
+      "kind": "color",
+      "value": "#c5cdd6"
+    },
+    {
+      "id": "m-signal",
+      "number": 18,
+      "name": "Signal",
+      "kind": "color",
+      "value": "#d32f2f"
+    }
+  ],
+  "score": {
+    "regions": [
+      {
+        "region": 1,
+        "spans": [
+          {
+            "id": "f2aeefba-75e5-4924-a0d4-87dc0662d688",
+            "memberId": "m-amber",
+            "start": 10,
+            "length": 1
+          }
+        ]
+      },
+      {
+        "region": 2,
+        "spans": []
+      },
+      {
+        "region": 3,
+        "spans": [
+          {
+            "id": "s-ocean-3",
+            "memberId": "m-ocean",
+            "start": 1,
+            "length": 1
+          }
+        ]
+      },
+      {
+        "region": 4,
+        "spans": [
+          {
+            "id": "s-ocean-4",
+            "memberId": "m-ocean",
+            "start": 1,
+            "length": 1
+          },
+          {
+            "id": "s-title-4",
+            "memberId": "m-title",
+            "start": 10,
+            "length": 1
+          }
+        ]
+      },
+      {
+        "region": 5,
+        "spans": [
+          {
+            "id": "s-ocean-5",
+            "memberId": "m-ocean",
+            "start": 1,
+            "length": 1
+          }
+        ]
+      },
+      {
+        "region": 6,
+        "spans": [
+          {
+            "id": "s-ocean-6",
+            "memberId": "m-ocean",
+            "start": 1,
+            "length": 1
+          }
+        ]
+      },
+      {
+        "region": 7,
+        "spans": [
+          {
+            "id": "6ebd2dcf-8e8b-4c05-86ce-efb9b35cec06",
+            "memberId": "m-door",
+            "start": 3,
+            "length": 1
+          },
+          {
+            "id": "0f91dc18-4bf7-4c5f-8b6d-efca37b3ade9",
+            "memberId": "m-amber",
+            "start": 8,
+            "length": 1
+          }
+        ]
+      },
+      {
+        "region": 8,
+        "spans": []
+      },
+      {
+        "region": 9,
+        "spans": [
+          {
+            "id": "s-night-9",
+            "memberId": "m-night",
+            "start": 1,
+            "length": 1
+          }
+        ]
+      },
+      {
+        "region": 10,
+        "spans": [
+          {
+            "id": "s-night-10",
+            "memberId": "m-night",
+            "start": 1,
+            "length": 1
+          }
+        ]
+      }
+    ]
+  },
+  "playhead": 11
+}

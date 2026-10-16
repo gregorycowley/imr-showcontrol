@@ -106,6 +106,54 @@ export function canPlace(member) {
   return Boolean(member) && member.kind !== 'sound'
 }
 
+export function spanById(show, id) {
+  for (const entry of show.score.regions) {
+    const span = entry.spans.find((item) => item.id === id)
+    if (span) return { region: entry.region, span }
+  }
+  return null
+}
+
+// Moves a span to another layer and frame. Dropping on a frame that already
+// starts a span swaps the two. Omitting frame keeps the span's start.
+export function moveSpan(show, spanId, region, frame) {
+  const found = spanById(show, spanId)
+  if (!found) return show
+  const start = frame == null ? found.span.start : clampFrame(frame)
+  const dest = show.score.regions.find((entry) => entry.region === region)
+  const occupant = dest?.spans.find((span) => span.id !== spanId && span.start === start) ?? null
+  if (!occupant && found.region === region && found.span.start === start) return show
+
+  return {
+    ...show,
+    score: {
+      regions: show.score.regions.map((entry) => {
+        let spans = entry.spans.filter((span) => span.id !== spanId && span.id !== occupant?.id)
+        if (entry.region === region) spans = [...spans, { ...found.span, start }]
+        if (occupant && entry.region === found.region) {
+          spans = [...spans, { ...occupant, start: found.span.start }]
+        }
+        spans.sort((a, b) => a.start - b.start)
+        return { region: entry.region, spans }
+      }),
+    },
+  }
+}
+
+export function applyTimelineDrop(show, region, frame, drag) {
+  const spanId = drag.spanId || (spanById(show, drag.memberId) ? drag.memberId : null)
+  if (spanId) return moveSpan(show, spanId, region, frame)
+  if (drag.memberId) return placeMember(show, region, frame, drag.memberId)
+  return show
+}
+
+export function applyStageDrop(show, region, drag) {
+  const spanId = drag.spanId || (spanById(show, drag.memberId) ? drag.memberId : null)
+  if (spanId) return moveSpan(show, spanId, region)
+  if (drag.memberId) return placeMember(show, region, show.playhead, drag.memberId)
+  return show
+}
+
 // Creates or replaces the span that starts at this frame on this region.
 export function placeMember(show, region, frame, memberId) {
   const member = memberById(show, memberId)
@@ -155,4 +203,23 @@ export function removeMember(show, id) {
 
 export function setPlayhead(show, frame) {
   return { ...show, playhead: clampFrame(frame) }
+}
+
+export function showIsBlank(show) {
+  return show.cast.length === 0 && show.score.regions.every((entry) => entry.spans.length === 0)
+}
+
+// Reads a saved show file. A file that is not a show is rejected so Load
+// cannot replace the open show with an empty one.
+export function parseShowText(text) {
+  let data
+  try {
+    data = JSON.parse(text)
+  } catch {
+    throw new Error('That file is not a show.')
+  }
+  if (!data || typeof data !== 'object' || Array.isArray(data) || !Array.isArray(data.cast)) {
+    throw new Error('That file is not a show.')
+  }
+  return normalizeShow(data)
 }

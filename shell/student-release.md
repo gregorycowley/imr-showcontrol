@@ -4,7 +4,13 @@ Download the file for your computer, then open Show Control. The interface is in
 
 1. Download `Show Control-*-mac.zip` (Apple silicon) or the matching Intel zip if one is listed.
 2. Unzip it and move `Show Control.app` to Applications.
-3. The first time, macOS will refuse a normal double-click because the app is not notarized. Right-click the app, choose Open, then Open again.
+3. The first time, macOS says the app is damaged. It is not damaged. Chrome marks the download, and this build is not signed with an Apple Developer ID. In Terminal, run:
+
+   ```sh
+   xattr -cr "/Applications/Show Control.app"
+   ```
+
+   Then open the app again. Right-click → Open does not clear this dialog.
 
 **Windows**
 

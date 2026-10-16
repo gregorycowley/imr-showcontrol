@@ -39,16 +39,16 @@ The app is built in phases. The UI loosely follows Macromedia Director (see `ref
 
 ## Phase 1 (built)
 
-- **Cast.** A strip along the bottom of the Stage. Add a member by hand: name, kind (video, sound, text, color), and a path or the text/color value. Remove a member. Chips show a member number, name, and kind mark.
+- **Cast.** A three-column grid to the right of the stage drawing. Add a member by hand: name, kind (video, sound, text, color), and a path or the text/color value. Remove a member. Chips show a member number, name, and kind mark.
 - **Stage.** The room drawing with ten numbered region faces. Hard-coded: faces cannot be moved, resized, or renamed. Each face shows the cue under the playhead: the video member's name, the text, the color fill, or dimmed when nothing is placed.
 - **Playhead.** Manual only. Click a frame on the ruler or use previous/next. The score has 30 frames and ten region rows in face order. No play, loop, tempo, or labels.
-- **Drop.** Drag a chip onto a face to create a span on that region's row starting at the playhead frame. Dropping on a face that already has a span starting at that frame replaces it. A region keeps showing a member until another span starts on that row (the hold rule). The timeline draws the span as a bar with a dashed hold tail running to the next span.
+- **Drop.** Drag a chip onto a face to create a span on that region's row starting at the playhead frame. Drag a chip onto a timeline row to create a span at the frame under the pointer. Dropping a new chip where a span already starts replaces it. Drag a span, or the content on a stage face, to move it to another frame or layer. Dropping a span on a frame that already starts one swaps the two. A region keeps showing a member until another span starts on that row (the hold rule). The timeline draws the span as a bar with a dashed hold tail running to the next span.
 - Sound members can be added but not dropped on a face; audio lanes come later.
 - `show.json` holds `cast`, `score.regions[].spans` (`memberId`, `start`, `length`), and `playhead`.
 
 ## Phase 2
 
-Drop chips directly on timeline rows. Move, resize, select, and delete spans. Clear spans. Soundtrack and Ambient lanes. Labels and jump by label. Add frames. Transport: play, stop, loop, tempo. Folder import for the cast.
+Resize, select, and delete spans. Clear spans. Soundtrack and Ambient lanes. Labels and jump by label. Add frames. Transport: play, stop, loop, tempo. Folder import for the cast.
 
 ## Phase 3
 

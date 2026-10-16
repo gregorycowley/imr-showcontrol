@@ -2,9 +2,23 @@ import { useState } from 'react'
 import { KINDS, canPlace, createMember } from './show.js'
 
 const DRAG_TYPE = 'application/x-cast-member'
+const SPAN_DRAG_TYPE = 'application/x-score-span'
 
 export function readDraggedMemberId(event) {
   return event.dataTransfer.getData(DRAG_TYPE) || event.dataTransfer.getData('text/plain')
+}
+
+export function writeSpanDrag(dataTransfer, spanId) {
+  dataTransfer.setData(SPAN_DRAG_TYPE, spanId)
+  dataTransfer.setData('text/plain', spanId)
+  dataTransfer.effectAllowed = 'move'
+}
+
+export function readDrop(event) {
+  return {
+    spanId: event.dataTransfer.getData(SPAN_DRAG_TYPE),
+    memberId: event.dataTransfer.getData(DRAG_TYPE) || event.dataTransfer.getData('text/plain'),
+  }
 }
 
 function kindMark(member) {
@@ -86,7 +100,7 @@ function AddMemberForm({ onAdd, onClose }) {
   )
 }
 
-export function CastStrip({ cast, disabled, onAdd, onRemove, onDragChange }) {
+export function CastStrip({ cast, disabled, onAdd, onRemove, onDragKind }) {
   const [adding, setAdding] = useState(false)
 
   return (
@@ -114,9 +128,9 @@ export function CastStrip({ cast, disabled, onAdd, onRemove, onDragChange }) {
                 event.dataTransfer.setData(DRAG_TYPE, member.id)
                 event.dataTransfer.setData('text/plain', member.id)
                 event.dataTransfer.effectAllowed = 'copy'
-                onDragChange(member.id)
+                onDragKind('member')
               }}
-              onDragEnd={() => onDragChange(null)}
+              onDragEnd={() => onDragKind(null)}
             >
               <span className="chip-number">{member.number}</span>
               {kindMark(member)}
@@ -125,6 +139,7 @@ export function CastStrip({ cast, disabled, onAdd, onRemove, onDragChange }) {
                 type="button"
                 className="chip-remove"
                 aria-label={`Remove ${member.name}`}
+                onMouseDown={(event) => event.stopPropagation()}
                 onClick={() => onRemove(member.id)}
                 disabled={disabled}
               >

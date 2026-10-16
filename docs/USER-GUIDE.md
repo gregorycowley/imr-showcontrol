@@ -13,11 +13,11 @@ This guide covers Phase 1. Later phases add timeline editing, sound lanes, playb
 3. Start the app: `npm run dev`
 4. Open `http://127.0.0.1:5173/` in a browser.
 
-The app saves your work automatically to `show.json` in the project folder. There is no Save button. If a save fails, a message appears at the bottom of the Actions panel.
+The app keeps a working copy in `show.json` and writes it as you edit. In the Actions panel, **Save** downloads a copy of that file, and **Load** opens a show you saved earlier. Loading a file replaces the show on screen, then the working copy updates to match. If a save fails, a message appears at the bottom of the Actions panel.
 
 ### Download the app
 
-Releases are built on GitHub. Open the latest release at `https://github.com/gregorycowley/imr-showcontrol/releases`, download the Mac zip or the Windows installer, and follow the notes on that page. The downloaded app includes the interface. Your show is saved on your computer. The first open on a Mac needs a right-click, then Open, because the app is not notarized.
+Releases are built on GitHub. Open the latest release at `https://github.com/gregorycowley/imr-showcontrol/releases`, download the Mac zip or the Windows installer, and follow the notes on that page. The downloaded app includes the interface. Your show is saved on your computer. The first open on a Mac says the app is damaged. It is not. After moving it to Applications, run `xattr -cr "/Applications/Show Control.app"` in Terminal, then open it again. Right-click → Open does not clear that dialog. A double-click with no extra step needs an Apple Developer ID signature, which this build does not have.
 
 ### Using the Show Control app instead of a browser
 
@@ -36,7 +36,7 @@ The window has three panels.
 
 | Panel | Where | What it does |
 |---|---|---|
-| **Stage** | Top | A drawing of the room with ten numbered projection surfaces. Shows what each surface displays at the current frame. The **Cast** strip sits along its bottom edge. |
+| **Stage** | Top | A drawing of the room with ten numbered projection surfaces. Shows what each surface displays at the current frame. The **Cast** sits to the right of the drawing. |
 | **Timeline** | Bottom left | The score. Frames run left to right (1 to 30). Ten rows, one per projection surface. The playhead marks the current frame. |
 | **Actions** | Bottom right | Reserved for trigger and mapping cards in a later phase. |
 
@@ -48,16 +48,16 @@ The room drawing shows ten **regions**, the surfaces a projector can fill:
 
 | Region | Surface |
 |---|---|
-| 1 | Left wall, upper |
-| 2 | Left wall, lower |
-| 3 | Back wall, upper left |
-| 4 | Back wall, upper right |
-| 5 | Back wall, lower left |
-| 6 | Back wall, lower right |
-| 7 | Right wall, upper |
-| 8 | Right wall, lower |
-| 9 | Ceiling |
-| 10 | Floor |
+| 1 | Right wall, upper |
+| 2 | Right wall, lower |
+| 3 | Back wall, lower right |
+| 4 | Back wall, lower left |
+| 5 | Back wall, lower center |
+| 6 | Back wall, upper right |
+| 7 | Back wall, upper center |
+| 8 | Back wall, upper left |
+| 9 | Left wall, lower |
+| 10 | Left wall, upper |
 
 The regions are fixed. You cannot move, resize, or rename them; they match the real room.
 
@@ -72,7 +72,7 @@ The stage is a preview. It shows names, text, and colors so you can plan off-sit
 
 ## The Cast
 
-The Cast is your library of things that can appear in the room. It runs along the bottom of the Stage panel. Each entry is a **cast member**, shown as a chip with a number, a kind mark, and a name.
+The Cast is your library of things that can appear in the room. It sits to the right of the room drawing. Each entry is a **cast member**, shown as a chip with a number, a kind mark, and a name, in a grid of three columns.
 
 ### Kinds of cast member
 
@@ -93,7 +93,7 @@ Paths are stored as you type them. Use paths relative to your media folder so th
 4. Fill in the field for that kind: a **Path** for video and sound, the **Text** for text, or pick a **Color**.
 5. Click **Add**. Click **Cancel** to close the form without adding.
 
-The new chip appears at the end of the strip with the next member number. If the strip fills up, it scrolls sideways.
+The new chip appears at the end of the grid with the next member number. If the grid fills the panel, it scrolls.
 
 ### Removing a member
 
@@ -133,7 +133,9 @@ When you place a cast member on a region, a **span** appears on that region's ro
 
 The member's name is written on the span. For a color member, the bar is filled with that color.
 
-In Phase 1 you cannot drag, resize, or delete spans in the timeline itself. You place them from the stage, and you remove them by removing their cast member. Timeline editing arrives in Phase 2.
+Drop a chip on a timeline row to place it on that region at the frame under the pointer. The cell under the pointer darkens while you drag.
+
+Drag a span, or the content showing on a stage face, to move it. Drop it on another frame or another layer. If that frame already starts a span, the two swap. You cannot resize or delete a span yet. Remove a span by removing its cast member.
 
 ## Placing a cast member on a region
 
@@ -142,7 +144,7 @@ This is the core workflow.
 1. Move the playhead to the frame where you want the change to happen.
 2. Drag a chip from the Cast strip.
    While you drag, every region on the stage gets a dashed outline to show it can accept the drop. The region under your pointer gets a thicker outline.
-3. Drop the chip on a region.
+3. Drop the chip on a region, or on that region's row in the timeline. A drop on the timeline uses the frame under the pointer. A drop on the stage uses the playhead.
 
 Three things happen at once:
 
@@ -175,15 +177,17 @@ Suppose a visitor walks in to a calm scene, then a title appears.
 1. Click **Add member**, name it `Ocean`, kind **Video**, path `media/ocean.mp4`, click **Add**.
 2. Click **Add member**, name it `Title`, kind **Text**, text `Welcome to the room`, click **Add**.
 3. Click **Add member**, name it `Night`, kind **Color**, pick a deep blue, click **Add**.
-4. With the playhead on frame 1, drag `Night` onto regions 9 (ceiling) and 10 (floor).
-5. Still on frame 1, drag `Ocean` onto regions 3, 4, 5, and 6 (the back wall).
+4. With the playhead on frame 1, drag `Night` onto regions 9 (left wall, lower) and 10 (left wall, upper).
+5. Still on frame 1, drag `Ocean` onto regions 3, 4, 5, and 6 (the lower back wall and the upper-right back face).
 6. Click frame **10** on the ruler.
 7. Drag `Title` onto region 4.
-8. Step back and forth with **◀** and **▶** and watch the stage: the back wall shows Ocean from frame 1, the ceiling and floor are blue throughout, and region 4 switches to the title at frame 10.
+8. Step back and forth with **◀** and **▶** and watch the stage: those back-wall regions show Ocean from frame 1, the left wall is blue throughout, and region 4 switches to the title at frame 10.
 
 ## The show file
 
-Everything you build is stored in `show.json` in the project folder. You do not need to edit it, but it is readable if you want to check or back up your work:
+**Save** downloads `show.json`, the same shape the app keeps as its working copy. **Load** reads a file in that shape and replaces the open show. If the open show already has cast members or spans, Load asks before replacing it. A file that is not a show is left unloaded and an error appears in the Actions panel.
+
+You do not need to edit the file, but it is readable if you want to check it:
 
 ```json
 {
@@ -204,7 +208,7 @@ Everything you build is stored in `show.json` in the project folder. You do not 
 - `score.regions` has one entry per region; each `span` points at a member and the frame where it starts.
 - `playhead` is the current frame.
 
-To start a fresh show, stop the app, replace the file with an empty cast and empty spans (or delete the members from the UI), and start again. Keep a copy of `show.json` if you want to save a version.
+To start a fresh show, delete the members from the cast. To keep a version, click **Save** and store that file. Click **Load** later to open it again.
 
 ## Tips
 
@@ -217,7 +221,7 @@ To start a fresh show, stop the app, replace the file with an empty cast and emp
 
 These are planned but not available yet:
 
-- Dragging chips directly onto timeline rows; moving, resizing, or deleting spans.
+- Resizing or deleting a span without removing its cast member.
 - A "clear" span to turn a region off.
 - Sound lanes (soundtrack and ambient), labels, tempo, play, and loop.
 - Importing a whole folder into the cast.

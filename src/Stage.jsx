@@ -1,33 +1,47 @@
 import { useState } from 'react'
-import { CastStrip, readDraggedMemberId } from './Cast.jsx'
-import { canPlace, memberAt, memberById } from './show.js'
+import { CastStrip, readDrop, writeSpanDrag } from './Cast.jsx'
+import { memberById, spanAt } from './show.js'
 
-// Fixed projection faces in the room drawing (viewBox from svgs/room-view.svg).
-// Order: left wall, back wall, right wall, ceiling, floor.
+// Faces from svgs/room-view-wide.svg. The drawing's region_01 … region_10
+// are timeline layers 1 … 10.
+const ROOM_LINES = [
+  'M18.4,490V10',
+  'M1892,10v480',
+  'M401.5,100h1107.5v300H401.5V100Z',
+  'M18.4,10l383.1,90M1892,10l-383.1,90M18.4,490l383.1-90M1892,490l-383.1-90',
+]
+
 const FACES = [
-  { region: 1, points: '91.6,135 145.6,154.4 145.6,283.8 91.6,281.7' },
-  { region: 2, points: '163.6,307.7 221.2,306.6 221.2,418.4 163.6,439.1' },
-  { region: 3, points: '274,174 391,174 391,291 274,291' },
-  { region: 4, points: '409,174 526,174 526,291 409,291' },
-  { region: 5, points: '274,309 391,309 391,426 274,426' },
-  { region: 6, points: '409,309 526,309 526,426 409,426' },
-  { region: 7, points: '632.8,169.8 575.2,189.4 575.2,293.5 632.8,292.3' },
-  { region: 8, points: '708.4,300 654.4,300 654.4,437.5 708.4,455.9' },
-  { region: 9, points: '240,80 560,80 500,130 300,130' },
-  { region: 10, points: '300,470 500,470 560,520 240,520' },
+  { region: 1, points: '1685.1 119.8 1562.6 139.4 1562.6 243.5 1685.1 242.3 1685.1 119.8' },
+  { region: 2, points: '1846 250 1731.1 250 1731.1 387.5 1846 405.9 1846 250' },
+  { region: 3, points: '1208.9 259 1457.9 259 1457.9 376 1208.9 376 1208.9 259' },
+  { region: 4, points: '452.5 259 663 259 663 376 452.5 376 452.5 259' },
+  { region: 5, points: '685.5 259 934.5 259 934.5 376 685.5 376 685.5 259' },
+  { region: 6, points: '1303 124 1479 124 1479 241 1303 241 1303 124' },
+  { region: 7, points: '981 124 1230 124 1230 241 981 241 981 124' },
+  { region: 8, points: '452.5 124 892 124 892 241 452.5 241 452.5 124' },
+  { region: 9, points: '217.6 257.7 340.2 256.6 340.2 368.4 217.6 389.1 217.6 257.7' },
+  { region: 10, points: '64.4 85 179.3 104.4 179.3 233.8 64.4 231.7 64.4 85' },
 ].map((face) => {
-  const coords = face.points.split(' ').map((pair) => pair.split(',').map(Number))
+  const nums = face.points.split(/[\s,]+/).map(Number)
+  const coords = []
+  for (let i = 0; i < nums.length; i += 2) coords.push([nums[i], nums[i + 1]])
+  const [fx, fy] = coords[0]
+  const [lx, ly] = coords[coords.length - 1]
+  if (fx === lx && fy === ly) coords.pop()
   const xs = coords.map(([x]) => x)
   const ys = coords.map(([, y]) => y)
   return {
-    ...face,
+    region: face.region,
+    points: coords.map(([x, y]) => `${x},${y}`).join(' '),
     cx: xs.reduce((a, b) => a + b, 0) / xs.length,
     cy: ys.reduce((a, b) => a + b, 0) / ys.length,
     width: Math.max(...xs) - Math.min(...xs),
   }
 })
 
-const LABEL_SIZE = 16
+const NUMBER_SIZE = 32
+const LABEL_SIZE = 26
 
 function fit(text, width) {
   const max = Math.max(3, Math.floor(width / (LABEL_SIZE * 0.55)))
@@ -44,7 +58,7 @@ function isDark(hex) {
   return 0.299 * r + 0.587 * g + 0.114 * b < 140
 }
 
-function Face({ face, member, droppable, onDrop }) {
+function Face({ face, member, span, droppable, onDrop, onDragKind }) {
   const [over, setOver] = useState(false)
   const classes = ['face']
   if (!member) classes.push('face-off')
@@ -59,24 +73,35 @@ function Face({ face, member, droppable, onDrop }) {
   return (
     <g
       className={classes.join(' ')}
+      draggable={Boolean(span)}
+      onDragStart={(event) => {
+        if (!span) return
+        writeSpanDrag(event.dataTransfer, span.id)
+        onDragKind('span')
+      }}
+      onDragEnd={() => onDragKind(null)}
       onDragOver={(event) => {
-        if (!droppable) return
+        const types = [...event.dataTransfer.types]
+        const moving = types.includes('application/x-score-span')
+        const copying = types.includes('application/x-cast-member') || types.includes('text/plain')
+        if (!droppable && !moving && !copying) return
         event.preventDefault()
-        event.dataTransfer.dropEffect = 'copy'
+        event.dataTransfer.dropEffect = moving ? 'move' : 'copy'
         setOver(true)
       }}
       onDragLeave={() => setOver(false)}
       onDrop={(event) => {
         event.preventDefault()
         setOver(false)
-        onDrop(readDraggedMemberId(event))
+        onDrop(readDrop(event))
       }}
     >
       <polygon points={face.points} style={fill ? { fill } : undefined} />
       <text
         className="face-number"
         x={face.cx}
-        y={label ? face.cy - LABEL_SIZE * 0.9 : face.cy}
+        y={label ? face.cy - NUMBER_SIZE * 0.7 : face.cy}
+        fontSize={NUMBER_SIZE}
         style={fill && isDark(fill) ? { fill: '#fff' } : undefined}
       >
         {face.region}
@@ -85,7 +110,8 @@ function Face({ face, member, droppable, onDrop }) {
         <text
           className="face-label"
           x={face.cx}
-          y={face.cy + LABEL_SIZE * 0.6}
+          y={face.cy + LABEL_SIZE * 0.7}
+          fontSize={LABEL_SIZE}
           style={fill && isDark(fill) ? { fill: '#fff' } : undefined}
         >
           {fit(label, face.width)}
@@ -95,32 +121,39 @@ function Face({ face, member, droppable, onDrop }) {
   )
 }
 
-export function Stage({ show, onAddMember, onRemoveMember, onPlace }) {
-  const [dragging, setDragging] = useState(null)
-  const draggingMember = show && dragging ? memberById(show, dragging) : null
-  const droppable = canPlace(draggingMember)
+export function Stage({ show, dragKind, onDragKind, onAddMember, onRemoveMember, onDrop }) {
+  const droppable = dragKind === 'member' || dragKind === 'span'
 
   return (
     <section className="panel stage" aria-label="Stage">
       <h2>Stage</h2>
+      <div className="stage-body">
       <div className="stage-preview">
-        <svg viewBox="60 50 680 500" className="room" role="img" aria-label="Room preview">
+        <svg viewBox="0 0 1920 500" className="room" role="img" aria-label="Room preview">
           <g className="room-lines">
-            <path d="M70 60 H730 V540 H70 Z" />
-            <path d="M250 150 H550 V450 H250 Z" />
-            <path d="M70 60 L250 150 M730 60 L550 150 M70 540 L250 450 M730 540 L550 450" />
+            {ROOM_LINES.map((d) => (
+              <path key={d} d={d} />
+            ))}
           </g>
-          {FACES.map((face) => (
-            <Face
-              key={face.region}
-              face={face}
-              member={show ? memberAt(show, face.region, show.playhead) : null}
-              droppable={droppable}
-              onDrop={(memberId) => {
-                if (memberId) onPlace(face.region, memberId)
-              }}
-            />
-          ))}
+          {FACES.map((face) => {
+            const span = show ? spanAt(show, face.region, show.playhead) : null
+            return (
+              <Face
+                key={face.region}
+                face={face}
+                span={span}
+                member={span ? memberById(show, span.memberId) : null}
+                droppable={droppable}
+                onDragKind={onDragKind}
+                onDrop={(drag) => onDrop(face.region, drag)}
+              />
+            )
+          })}
+          <g className="room-middle">
+            <line x1="955.2" y1="10" x2="955.2" y2="16" />
+            <line className="room-middle-dash" x1="955.2" y1="28" x2="955.2" y2="478" />
+            <line x1="955.2" y1="484" x2="955.2" y2="490" />
+          </g>
         </svg>
       </div>
       <CastStrip
@@ -128,8 +161,9 @@ export function Stage({ show, onAddMember, onRemoveMember, onPlace }) {
         disabled={!show}
         onAdd={onAddMember}
         onRemove={onRemoveMember}
-        onDragChange={setDragging}
+        onDragKind={onDragKind}
       />
+      </div>
     </section>
   )
 }

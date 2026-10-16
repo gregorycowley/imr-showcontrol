@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1920 500">
+  <!-- Generator: Adobe Illustrator 30.8.2, SVG Export Plug-In . SVG Version: 2.1.4 Build 7)  -->
+  <defs>
+    <style>
+      .st0, .st1, .st2, .st3, .st4, .st5, .st6, .st7, .st8, .st9, .st10 {
+        stroke: #000;
+        stroke-width: 2px;
+      }
+
+      .st0, .st11, .st12 {
+        fill: none;
+      }
+
+      .st1, .st13 {
+        fill: #fdd835;
+      }
+
+      .st2 {
+        fill: #b3e924;
+      }
+
+      .st11, .st12 {
+        stroke: #666;
+      }
+
+      .st3 {
+        fill: #fb8c00;
+      }
+
+      .st4 {
+        fill: #8e24aa;
+      }
+
+      .st5 {
+        fill: #1e88e5;
+      }
+
+      .st6 {
+        fill: #e53935;
+      }
+
+      .st7 {
+        fill: #d81b60;
+      }
+
+      .st12 {
+        stroke-dasharray: 12 12;
+      }
+
+      .st8 {
+        fill: #00acc1;
+      }
+
+      .st9 {
+        fill: #43a047;
+      }
+
+      .st10 {
+        fill: #d49b00;
+      }
+    </style>
+  </defs>
+  <g id="Room">
+    <path class="st0" d="M18.4,490V10"/>
+    <path class="st0" d="M1892,10v480"/>
+    <path class="st0" d="M401.5,100h1107.5v300H401.5V100Z"/>
+    <path class="st0" d="M18.4,10l383.1,90M1892,10l-383.1,90M18.4,490l383.1-90M1892,490l-383.1-90"/>
+  </g>
+  <g>
+    <polygon id="region_x5F_10" class="st6" points="64.4 85 179.3 104.4 179.3 233.8 64.4 231.7 64.4 85"/>
+    <polygon id="region_x5F_09" class="st3" points="217.6 257.7 340.2 256.6 340.2 368.4 217.6 389.1 217.6 257.7"/>
+    <polygon id="region_x5F_08" class="st1" points="452.5 124 892 124 892 241 452.5 241 452.5 124"/>
+    <polygon id="region_x5F_07" class="st9" points="981 124 1230 124 1230 241 981 241 981 124"/>
+    <polygon id="region_x5F_06" class="st2" points="1303 124 1479 124 1479 241 1303 241 1303 124"/>
+    <polygon id="region_x5F_05" class="st10" points="685.5 259 934.5 259 934.5 376 685.5 376 685.5 259"/>
+    <polygon id="region_x5F_04" class="st5" points="452.5 259 663 259 663 376 452.5 376 452.5 259"/>
+    <polygon id="region_x5F_03" class="st4" points="1208.9 259 1457.9 259 1457.9 376 1208.9 376 1208.9 259"/>
+    <polygon id="region_x5F_02" class="st8" points="1846 250 1731.1 250 1731.1 387.5 1846 405.9 1846 250"/>
+    <polygon id="region_x5F_01" class="st7" points="1685.1 119.8 1562.6 139.4 1562.6 243.5 1685.1 242.3 1685.1 119.8"/>
+  </g>
+  <g id="Middle">
+    <line class="st13" x1="955.2" y1="10" x2="955.2" y2="490"/>
+    <g>
+      <line class="st11" x1="955.2" y1="10" x2="955.2" y2="16"/>
+      <line class="st12" x1="955.2" y1="28" x2="955.2" y2="478"/>
+      <line class="st11" x1="955.2" y1="484" x2="955.2" y2="490"/>
+    </g>
+  </g>
+</svg>

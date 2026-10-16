@@ -1,10 +1,20 @@
-import { FRAME_COUNT, REGIONS, memberById, regionSpans } from './show.js'
+import { useState } from 'react'
+import { FRAME_COUNT, REGIONS, clampFrame, memberById, regionSpans } from './show.js'
+import { readDrop, writeSpanDrag } from './Cast.jsx'
 
 const FRAMES = Array.from({ length: FRAME_COUNT }, (_, index) => index + 1)
 
-export function Timeline({ show, onPlayhead }) {
+function frameFromPointer(event) {
+  const rect = event.currentTarget.getBoundingClientRect()
+  if (rect.width <= 0) return 1
+  const ratio = (event.clientX - rect.left) / rect.width
+  return clampFrame(Math.floor(ratio * FRAME_COUNT) + 1)
+}
+
+export function Timeline({ show, dragKind, onDragKind, onPlayhead, onDrop }) {
   const playhead = show?.playhead ?? 1
   const disabled = !show
+  const [hover, setHover] = useState(null)
 
   return (
     <section className="panel timeline" aria-label="Timeline">
@@ -51,9 +61,33 @@ export function Timeline({ show, onPlayhead }) {
           {REGIONS.map((region) => (
             <div key={region} className="score-row">
               <span className="row-label">{region}</span>
-              <div className="row-cells">
+              <div
+                className="row-cells"
+                onDragOver={(event) => {
+                  if (!show) return
+                  event.preventDefault()
+                  const moving = [...event.dataTransfer.types].includes('application/x-score-span')
+                  event.dataTransfer.dropEffect = moving || dragKind === 'span' ? 'move' : 'copy'
+                  setHover({ region, frame: frameFromPointer(event) })
+                }}
+                onDragLeave={(event) => {
+                  if (event.currentTarget.contains(event.relatedTarget)) return
+                  setHover((current) => (current?.region === region ? null : current))
+                }}
+                onDrop={(event) => {
+                  if (!show) return
+                  event.preventDefault()
+                  const frame = frameFromPointer(event)
+                  setHover(null)
+                  onDrop(region, frame, readDrop(event))
+                }}
+              >
                 {FRAMES.map((frame) => (
-                  <span key={frame} className="cell" style={{ gridColumn: frame }} />
+                  <span
+                    key={frame}
+                    className={hover?.region === region && hover.frame === frame ? 'cell cell-over' : 'cell'}
+                    style={{ gridColumn: frame }}
+                  />
                 ))}
                 {show
                   ? regionSpans(show, region).map((span, index, spans) => {
@@ -68,6 +102,12 @@ export function Timeline({ show, onPlayhead }) {
                           className={`span span-${member.kind}`}
                           style={{ gridColumn: `${span.start} / ${holdEnd}` }}
                           title={`${member.name} from frame ${span.start}`}
+                          draggable
+                          onDragStart={(event) => {
+                            writeSpanDrag(event.dataTransfer, span.id)
+                            onDragKind('span')
+                          }}
+                          onDragEnd={() => onDragKind(null)}
                         >
                           <span
                             className="span-bar"
